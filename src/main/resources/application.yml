@@ -1,0 +1,27 @@
+server:
+    port: '${PORT:8080}'
+spring:
+    application:
+        name: entrega-app
+
+amazon:
+    aws:
+        accesskey: AKIAYS2NR4YI7FYVEJ6L
+        secretkey: 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
+    dynamodb:
+        endpoint: dynamodb.us-east-1.amazonaws.com
+        #endpoint: http://localhost:8000
+        region: us-east-1
+
+springdoc:
+    info:
+        title: Microsserviço de Entrega
+        description: API para gerenciamento de entregas
+        version: 1.0.0
+    paths-to-match:
+        - /api/**
+    swagger-ui:
+        path: /swagger-ui.html
+    api-docs:
+        path: /api-docs
+        enabled: true
