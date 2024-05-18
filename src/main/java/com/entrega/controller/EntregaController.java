@@ -32,6 +32,7 @@ public class EntregaController {
         @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
 
+
     @GetMapping("/obter/tudo")
     @ResponseStatus(HttpStatus.OK)
     public Iterable<Entrega> getEntregas() {
@@ -45,7 +46,7 @@ public class EntregaController {
 
     @GetMapping("/obter/porId/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Optional<Entrega>> getEntregaById(@PathVariable Long id) {
+    public ResponseEntity<Optional<Entrega>> getEntregaById(@PathVariable String id) {
         try {
             Optional<Entrega> entrega = entregaService.getEntregaById(id);
             return ResponseEntity.ok(entrega);
@@ -61,8 +62,10 @@ public class EntregaController {
     })
     @PostMapping("/criar")
     @ResponseStatus(HttpStatus.CREATED)
-    public void criarEntrega(@RequestBody Entrega entrega) {
+    public Entrega criarEntrega(@RequestBody Entrega entrega) {
         entregaService.criarEntrega(entrega);
+        String r;
+        return null;
     }
 
     @Operation(summary = "Atualiza uma entrega existente", responses = {
@@ -72,7 +75,7 @@ public class EntregaController {
     })
     @PutMapping("/editar/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void atualizarEntrega(@PathVariable Long id, @RequestBody Entrega entrega) {
+    public void atualizarEntrega(@PathVariable String id, @RequestBody Entrega entrega) {
         entregaService.atualizarEntrega(id, entrega);
     }
 
@@ -82,7 +85,7 @@ public class EntregaController {
     })
     @DeleteMapping("/deletar/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void excluirEntrega(@PathVariable Long id) {
+    public void excluirEntrega(@PathVariable String id) {
         entregaService.excluirEntrega(id);
     }
 

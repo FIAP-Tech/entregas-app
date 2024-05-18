@@ -10,34 +10,26 @@ import java.util.Optional;
 @Service
 public class EntregaServiceImpl {
 
-
     private EntregaRepository entregaRepository;
-
     @Autowired
     public EntregaServiceImpl(EntregaRepository entregaRepository) {
         this.entregaRepository = entregaRepository;
     }
-
     public Iterable<Entrega> getEntregas() {
        return entregaRepository.findAll();
     }
-
-    public Optional<Entrega> getEntregaById(Long id) {
-        return entregaRepository.findById(String.valueOf(id));
+    public Optional<Entrega> getEntregaById(String id) {
+        return entregaRepository.findById(id);
     }
-
-    public void criarEntrega(Entrega entrega) {
+    public Entrega criarEntrega(Entrega entrega) {
+        return entregaRepository.save(entrega);
+    }
+    public void atualizarEntrega(String id, Entrega entrega) {
+        entregaRepository.findById(id);
         entregaRepository.save(entrega);
     }
-
-    public void atualizarEntrega(Long id, Entrega entrega) {
-        entregaRepository.findById(String.valueOf(id));
-        entregaRepository.save(entrega);
-
-    }
-
-    public void excluirEntrega(Long id) {
-        entregaRepository.findById(String.valueOf(id));
-        entregaRepository.deleteById(String.valueOf(id));
+    public void excluirEntrega(String id) {
+        entregaRepository.findById(id);
+        entregaRepository.deleteById(id);
     }
 }
