@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
 import java.util.List;
 
 
-@DynamoDBTable(tableName = "db_entregas")
+@DynamoDBTable(tableName = "db_entrega")
 @Data
 public class Entrega {
 
