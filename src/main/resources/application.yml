@@ -3,6 +3,8 @@ server:
 spring:
     application:
         name: entrega-app
+    devtools:
+        restart: true
 
 logging:
     level:
@@ -13,6 +15,7 @@ amazon:
     aws:
         accesskey: ${AWS_ACCESS_KEY}
         secretkey: ${AWS_SECRET_KEY}
+        queueName: ${AWS_QUEUE_NAME}
     dynamodb:
         endpoint: ${AWS_END_POINT}
         # Se estiver usando DynamoDB local, descomente a linha abaixo e comente a linha acima
@@ -21,9 +24,11 @@ amazon:
 
 springdoc:
     info:
-        title: Microsserviço de Entrega
-        description: API para gerenciamento de entregas
+        title: Microsserviço de Entrega  # Descriptive title for your API
         version: 1.0.0
+        description: API para gerenciamento de entregas  # Detailed description
+    servers:
+        - url: https://minha-api.com
     paths-to-match:
         - /api/**
     swagger-ui:

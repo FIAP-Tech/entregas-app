@@ -1,23 +1,25 @@
 package com.entrega.controller;
 
-import com.entrega.exception.EntregaInternalServerErrorException;
-import com.entrega.model.Entrega;
+import com.entrega.model.dto.EntregaDTO;
+import com.entrega.model.entity.Entrega;
 import com.entrega.service.EntregaServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/entrega")
-public class EntregaController {
+public class EntregaController{
 
     private final EntregaServiceImpl entregaService;
 
@@ -35,8 +37,13 @@ public class EntregaController {
 
     @GetMapping("/obter/tudo")
     @ResponseStatus(HttpStatus.OK)
-    public Iterable<Entrega> getEntregas() {
-        return entregaService.getEntregas();
+    public ResponseEntity<Iterable<Entrega>> getEntregas() {
+        Iterable<Entrega> entregas = entregaService.getEntregas();
+        if (entregas.iterator().hasNext()) {
+            return ResponseEntity.ok(entregas);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nenhuma Entrega Encontrada");
+        }
     }
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Entrega encontrada", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Entrega.class))),
@@ -47,11 +54,11 @@ public class EntregaController {
     @GetMapping("/obter/porId/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Optional<Entrega>> getEntregaById(@PathVariable String id) {
-        try {
-            Optional<Entrega> entrega = entregaService.getEntregaById(id);
+        Optional<Entrega> entrega = entregaService.getEntregaById(id);
+        if (entrega.isPresent()) {
             return ResponseEntity.ok(entrega);
-        } catch (Exception e) {
-            throw new EntregaInternalServerErrorException();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entrega não encontrada");
         }
     }
 
@@ -62,10 +69,9 @@ public class EntregaController {
     })
     @PostMapping("/criar")
     @ResponseStatus(HttpStatus.CREATED)
-    public Entrega criarEntrega(@RequestBody Entrega entrega) {
-        entregaService.criarEntrega(entrega);
-        String r;
-        return null;
+    public ResponseEntity<Object> criarEntrega(@RequestBody @Valid EntregaDTO entregaDTO) {
+        Entrega entrega = entregaService.criarEntrega(entregaDTO);
+        return ResponseEntity.ok(entrega);
     }
 
     @Operation(summary = "Atualiza uma entrega existente", responses = {
@@ -75,8 +81,13 @@ public class EntregaController {
     })
     @PutMapping("/editar/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void atualizarEntrega(@PathVariable String id, @RequestBody Entrega entrega) {
-        entregaService.atualizarEntrega(id, entrega);
+    public ResponseEntity<Object> atualizarEntrega(@PathVariable String id, @RequestBody EntregaDTO entregaDTO) {
+        Optional<Entrega> entrega = entregaService.getEntregaById(id);
+        if (entrega.isPresent()) {
+            return ResponseEntity.ok(entregaService.atualizarEntrega(id, entregaDTO));
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entrega não encontrada");
+        }
     }
 
     @Operation(summary = "Exclui uma entrega", responses = {
@@ -86,7 +97,12 @@ public class EntregaController {
     @DeleteMapping("/deletar/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluirEntrega(@PathVariable String id) {
-        entregaService.excluirEntrega(id);
+        Optional<Entrega> entrega = entregaService.getEntregaById(id);
+        if (entrega.isPresent()) {
+            entregaService.excluirEntrega(id);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entrega não encontrada");
+        }
     }
 
 }

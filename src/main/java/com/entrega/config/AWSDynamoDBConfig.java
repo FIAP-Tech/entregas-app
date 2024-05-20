@@ -1,7 +1,6 @@
 package com.entrega.config;
 
 import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
@@ -13,7 +12,7 @@ import org.springframework.util.StringUtils;
 
 @Configuration
 @EnableDynamoDBRepositories(basePackages = "com.entrega.repository")
-public class DynamoDBConfig {
+public class AWSDynamoDBConfig {
 
     @Value("${amazon.dynamodb.endpoint}")
     private String amazonDynamoDBEndpoint;
@@ -35,6 +34,7 @@ public class DynamoDBConfig {
 
         return amazonDynamoDB;
     }
+
 
     @Bean
     public AWSCredentials amazonAWSCredentials() {

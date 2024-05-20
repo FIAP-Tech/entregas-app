@@ -1,0 +1,6 @@
+amazon:
+    aws:
+        accesskey: test-access-key
+        secretkey: test-secret-key
+    dynamodb:
+        endpoint: http://localhost:8000
