@@ -27,6 +27,9 @@ public class EntregaDTO {
     @JsonProperty("formaPagamento")
     @NotBlank(message = "formaPagamento precisa ser enviado")
     private String formaPagamento;
+    @JsonProperty("validadeFormaPagamentoCartao")
+    @NotBlank(message = "validadeFormaPagamentoCartao precisa ser enviado")
+    private String validadeFormaPagamentoCartao;
     @JsonProperty("pedidoProdutos")
     @NotEmpty(message = "A lista de pedidoProdutos não pode estar vazia.")
     @Valid
@@ -66,6 +69,14 @@ public class EntregaDTO {
 
     public String getFormaPagamento() {
         return formaPagamento;
+    }
+
+    public String getValidadeFormaPagamentoCartao() {
+        return validadeFormaPagamentoCartao;
+    }
+
+    public void setValidadeFormaPagamentoCartao(String validadeFormaPagamentoCartao) {
+        this.validadeFormaPagamentoCartao = validadeFormaPagamentoCartao;
     }
 
     public void setFormaPagamento(String formaPagamento) {

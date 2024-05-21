@@ -34,6 +34,14 @@ public class EntregaMapper {
                 entrega.setFormaPagamento(entregaDTO.getFormaPagamento());
             }
 
+            if (entregaDTO.getFormaPagamento() != null) {
+                entrega.setFormaPagamento(entregaDTO.getFormaPagamento());
+            }
+
+            if (entregaDTO.getValidadeFormaPagamentoCartao() != null) {
+                entrega.setValidadeFormaPagamentoCartao(entregaDTO.getValidadeFormaPagamentoCartao());
+            }
+
             if (entregaDTO.getPedidoProdutos() != null) {
                 entrega.setPedidoProdutos(transformaProdutos(entregaDTO.getPedidoProdutos()));
             }
