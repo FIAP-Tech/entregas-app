@@ -1,16 +1,9 @@
 package com.entrega.unitario.model;
 
-import com.entrega.model.EntregaMapper;
-import com.entrega.model.dto.EntregaDTO;
 import com.entrega.model.entity.Cliente;
 import com.entrega.model.entity.Endereco;
-import com.entrega.model.entity.Entrega;
 import com.entrega.model.entity.PedidoProduto;
-import com.entrega.util.JsonUtil;
 import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 

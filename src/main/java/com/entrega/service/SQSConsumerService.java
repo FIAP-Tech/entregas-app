@@ -4,7 +4,6 @@ import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.model.ReceiveMessageResult;
 import com.entrega.model.dto.EntregaDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,7 +17,8 @@ public class SQSConsumerService {
     private final ObjectMapper objectMapper;
     @Value("${AWS_QUEUE_NAME}")
     private String queueName;
-    private final String endpointUrl = "http://localhost:8080/api/v1/entrega";
+    @Autowired
+    private EntregaServiceImpl entregaService;
 
     @Autowired
     public SQSConsumerService(AmazonSQS amazonSQSClient, RestTemplate restTemplate, ObjectMapper objectMapper) {
@@ -37,7 +37,7 @@ public class SQSConsumerService {
 
             try {
                 EntregaDTO entregaDTO = objectMapper.readValue(message.getBody(), EntregaDTO.class);
-                String response = restTemplate.postForObject(endpointUrl, entregaDTO, String.class);
+                entregaService.criarEntrega(entregaDTO);
                 amazonSQSClient.deleteMessage(queueUrl, message.getReceiptHandle());
             } catch (Exception e) {
                 e.printStackTrace();
