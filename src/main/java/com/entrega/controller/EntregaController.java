@@ -18,7 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/entrega")
+@RequestMapping("/api/entregas")
 public class EntregaController{
 
     private final EntregaServiceImpl entregaService;
