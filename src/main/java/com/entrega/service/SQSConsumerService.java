@@ -2,6 +2,8 @@ package com.entrega.service;
 
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.model.ReceiveMessageResult;
+import com.amazonaws.services.sqs.model.SendMessageRequest;
+import com.entrega.model.MensagemEmail;
 import com.entrega.model.dto.EntregaDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ public class SQSConsumerService {
     private String queueName;
     @Autowired
     private EntregaServiceImpl entregaService;
+
 
     @Autowired
     public SQSConsumerService(AmazonSQS amazonSQSClient, RestTemplate restTemplate, ObjectMapper objectMapper) {
@@ -39,6 +42,18 @@ public class SQSConsumerService {
                 EntregaDTO entregaDTO = objectMapper.readValue(message.getBody(), EntregaDTO.class);
                 entregaService.criarEntrega(entregaDTO);
                 amazonSQSClient.deleteMessage(queueUrl, message.getReceiptHandle());
+
+                MensagemEmail mensagemEmail = MensagemEmail.builder()
+                                .assunto("Entrega Feita com Sucesso")
+                                .emailDestinatario(entregaDTO.getCliente().getEmail())
+                                .corpoEmail("Parabéns, seu Pedido " + entregaDTO.getIdPedido() +" já foi entregue pela nossa transportadora")
+                                .build();
+
+                SendMessageRequest sendMsgRequest = new SendMessageRequest()
+                        .withQueueUrl(amazonSQSClient.getQueueUrl("envia-emails").getQueueUrl())
+                        .withMessageBody(objectMapper.writeValueAsString(mensagemEmail));
+
+                amazonSQSClient.sendMessage(sendMsgRequest);
             } catch (Exception e) {
                 e.printStackTrace();
             }
