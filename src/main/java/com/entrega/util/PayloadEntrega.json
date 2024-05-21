@@ -1,5 +1,5 @@
 {
-  "idPedido": 43,
+  "idPedido": 48,
   "cliente": {
     "id": 1,
     "nome": "Ricardo Silva",
@@ -17,7 +17,8 @@
   },
   "dataPedido": "16/05/2024 23:35:03",
   "totalPedido": 5558.50,
-  "formaPagamento": "CARTAO_CREDITO",
+  "formaPagamento": "BOLETO",
+  "validadeFormaPagamentoCartao": "14/35",
   "pedidoProdutos": [
     {
       "idProduto": 1,
